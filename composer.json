@@ -1,0 +1,11 @@
+{
+    "require": {
+        "enqueue/rdkafka": "^0.10.16",
+        "ramsey/uuid": "^4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
