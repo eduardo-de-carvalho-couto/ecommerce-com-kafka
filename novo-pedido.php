@@ -1,22 +1,14 @@
 <?php
 
 use App\Connection;
+use App\KafkaDispatcher;
 use Ramsey\Uuid\Uuid;
 
 require_once __DIR__. '/vendor/autoload.php';
 
 
-$context = Connection::createContext();
+$key = (string) Uuid::uuid4();
 
-$key = Uuid::uuid4();
-
-$value = $context->createMessage('12241,12315,3463634');
-$record = $context->createTopic('ECOMMERCE_NEW_ORDER');
-$record->setKey($key . "12241,12315,3463634");
-
-$email = $context->createMessage("Thank you for you order! We are processing your order!");
-$emailRecord = $context->createTopic('ECOMMERCE_SEND_EMAIL');
-$emailRecord->setKey("$key");
-
-$context->createProducer()->send($record, $value);
-$context->createProducer()->send($emailRecord, $email);
+$dispatcher = new KafkaDispatcher();
+$dispatcher->send('ECOMMERCE_NEW_ORDER', $key, "$key,12241,12315,3463634");
+$dispatcher->send('ECOMMERCE_SEND_EMAIL', $key, "Thank you for you order! We are processing your order!");
